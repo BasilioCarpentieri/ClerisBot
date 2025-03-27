@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <h3>Testar envio para Google Apps Script</h3>
+    <form id="form">
+      <input type="text" name="Requester" placeholder="Requester" required><br>
+      <input type="text" name="Product" placeholder="Product" required><br>
+      <input type="text" name="Supplier" placeholder="Supplier" required><br>
+      <input type="text" name="Urgency" placeholder="Urgency" required><br><br>
+      <button type="submit">Enviar</button>
+    </form>
+
+    <script>
+      const form = document.getElementById("form");
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const formData = new FormData(form);
+        const obj = {};
+        formData.forEach((value, key) => obj[key] = value);
+
+        try {
+          const res = await fetch("https://script.google.com/macros/s/AKfycbwfGA_rNyk8FSn1v5AB5j9hY4x0gEe8otlcmRqkS-iOyyXmtseLrrmw-gO7qXa3YrgVAQ/exec", {
+            method: "POST",
+            body: JSON.stringify(obj),
+            headers: { "Content-Type": "application/json" }
+          });
+
+          const json = await res.json();
+          alert("Resposta: " + JSON.stringify(json));
+        } catch (err) {
+          alert("Erro ao enviar: " + err.message);
+          console.error(err);
+        }
+      });
+    </script>
+  </body>
+</html>
